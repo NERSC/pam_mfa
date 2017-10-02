@@ -1,6 +1,6 @@
 Summary:   MFA PAM Filter
 Name:      pam_mfa
-Version:   1.0.0
+Version:   1.0.2
 Release:   1
 License:   BSD (LBNL-modified)
 Group:     System Environment/Base
@@ -31,5 +31,8 @@ MAKEFLAGS=%{?_smp_mflags} %{__make}
 # %doc AUTHORS Dockerfile LICENSE NEWS README* doc extra/cle6
 
 %changelog
-* Sun Apr 24 2016 Douglas Jacobsen <dmjacobsen@lbl.gov> - 16.04.0pre1-1
+* Sun Oct  2 2017 Shane Canon <scanon@lbl.gov> - 1.0.2
+- Add nomfa
+
+* Sun Sep 24 2017 Shane Canon <scanon@lbl.gov> - 1.0.1
 - Initial RPM

@@ -17,6 +17,7 @@
 #define ATTR "authorizedService"
 #define BUFFSIZE 15L*3000L
 #define MFALIST_FILE "/etc/mfausers"
+#define NOMFA_FILE "/etc/nomfa"
 #define MFA_USE_FILE 0
 #define MFA_USE_LDAP 1
 
@@ -180,6 +181,11 @@ PAM_EXTERN int pam_sm_acct_mgmt(pam_handle_t *pamh, int flags,
 			 //log_error("Failed to read the pam config");
 			 return result;
 	}
+        /* Ignore if NOMFA file exist */
+	if( access( NOMFA_FILE, F_OK ) == 0 ) {
+     		return (PAM_IGNORE);
+	}
+
 	/* identify user */
 	if ((pam_err = pam_get_user(pamh, &user, NULL)) != PAM_SUCCESS)
 		return (pam_err);
@@ -187,7 +193,7 @@ PAM_EXTERN int pam_sm_acct_mgmt(pam_handle_t *pamh, int flags,
 		return (PAM_USER_UNKNOWN);
 
 	if (config.mode==MFA_USE_FILE){
-  	result = check_user_file(user, &config);
+	  	result = check_user_file(user, &config);
 	}
 	else {
 		result = check_user_ldap(user, &config);
@@ -219,9 +225,14 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags,
 			 return result;
 	}
 
+        /* Ignore if NOMFA file exist */
+	if( access( NOMFA_FILE, F_OK ) == 0 ) {
+     		return (PAM_IGNORE);
+	}
 	/* identify user */
 	if ((pam_err = pam_get_user(pamh, &user, NULL)) != PAM_SUCCESS)
 		return (pam_err);
+
 	if ((pwd = getpwnam(user)) == NULL)
 		return (PAM_USER_UNKNOWN);
 
